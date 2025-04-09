@@ -1,5 +1,4 @@
 # Terraform
-# Terraform: State Management & Core Commands
 
 ## 📂 How do you manage state for large-scale applications?
 
@@ -28,8 +27,6 @@ Splitting the state improves:
    - The **destination module** should use a remote data source with a **custom backend** (same as source backend).
    - Use that data source to fetch the desired property.
 
----
-
 ## 📦 What are the primary commands in a Terraform workflow?
 
 ```bash
@@ -40,8 +37,8 @@ terraform destroy    # Tear down infrastructure
 terraform state      # Manage Terraform state
 terraform taint      # Force recreation of a resource
 
-## 🎯 **How do you target specific resources in a plan or apply?
-**
+## 🎯 How do you target specific resources in a plan or apply?
+
 - Use the `-target` argument in your Terraform commands:
 
 ```bash
