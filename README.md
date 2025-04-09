@@ -30,10 +30,10 @@ Splitting the state improves:
 - Manageability
 
 #### 🛠️ Steps to manage state efficiently:
-1. Break monolithic `main.tf` code into modules/directories/resource-specific files.
-2. Configure **separate backends** for each module.
-3. Use `terraform state mv` to migrate resources from the old state to the new, split state.
-4. Use **remote state data source** to link dependencies:
+- Break monolithic `main.tf` code into modules/directories/resource-specific files.
+- Configure **separate backends** for each module.
+- Use `terraform state mv` to migrate resources from the old state to the new, split state.
+- Use **remote state data source** to link dependencies:
    - The **source module** should expose values using `output`.
    - The **destination module** should use a remote data source with a **custom backend** (same as source backend).
    - Use that data source to fetch the desired property.
@@ -64,26 +64,32 @@ terraform state rm aws_s3_bucket.old_logs
 
 ### How do you import an existing resource into the Terraform state?
 ```bash
-	- terraform import aws_instance.web i-1234567890abcdef0.
-	- You must define the resource in code first. Helps when adopting existing infrastructure into IaC.
+terraform import aws_instance.web i-1234567890abcdef0.
 ```
+You must define the resource in code first. Helps when adopting existing infrastructure into IaC.
 
 ### How do you validate your Terraform code?
 ```bash
-	- terraform validate      # Check syntax and internal logic
-	- terraform fmt -check    # Check formatting consistency
+terraform validate      # Check syntax and internal logic
+terraform fmt -check    # Check formatting consistency
 ```
 
 ### How do you debug Terraform issues?
-	- TF_LOG=DEBUG terraform apply
+```bash
+TF_LOG=DEBUG terraform apply
+```
 
 ### What does terraform taint do?
-	- terraform taint aws_instance.web
-	- Forces a resource to be destroyed and recreated on the next apply.
-	- Useful when the infrastructure is acting up and you suspect a "dirty" resource.
+```bash
+terraform taint aws_instance.web
+```
+- Forces a resource to be destroyed and recreated on the next apply.
+- Useful when the infrastructure is acting up and you suspect a "dirty" resource.
 
 ### What’s the difference between terraform plan -out and terraform apply <file>?
-	- terraform plan -out=tfplan
-	- terraform apply tfplan
-	- Saves the plan for manual review, approval gates, or CI/CD pipelines.
-	- Prevents drift between the plan and the apply.
+```bash
+terraform plan -out=tfplan
+terraform apply tfplan
+```
+Saves the plan for manual review, approval gates, or CI/CD pipelines.
+Prevents drift between the plan and the apply.
