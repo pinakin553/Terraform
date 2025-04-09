@@ -39,3 +39,30 @@ terraform apply      # Apply changes to infrastructure
 terraform destroy    # Tear down infrastructure
 terraform state      # Manage Terraform state
 terraform taint      # Force recreation of a resource
+
+--
+
+## 🎯 How do you target specific resources in a plan or apply?
+
+- Use the `-target` argument in your Terraform commands:
+
+```bash
+terraform plan -target=aws_instance.web
+terraform apply -target=aws_instance.web
+
+--
+
+## 📄 What does `terraform state list` do?
+
+- Lists all resources currently **tracked in the Terraform state file**.
+
+```bash
+terraform state list
+
+--
+
+## 🗑️ How do you remove a resource from state without deleting it?
+
+```bash
+terraform state rm aws_s3_bucket.old_logs
+
