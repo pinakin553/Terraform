@@ -9,6 +9,7 @@ terraform apply      # Apply changes to infrastructure
 terraform destroy    # Tear down infrastructure
 terraform state      # Manage Terraform state
 terraform taint      # Force recreation of a resource
+terraform show       # To analyse what exactly changed
 ```
 
 ### 📂 How do you manage state for large-scale applications?
