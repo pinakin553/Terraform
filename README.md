@@ -185,7 +185,6 @@ output "instance_ips" {
   value = aws_instance.ec2[*].public_ip
 }
 ```
-```
 ## Remote: `main.tf`
 
 provider "aws" {
@@ -204,4 +203,4 @@ module "web_servers" {
     Project     = "TerraformExample"
   }
 }
-```
+
