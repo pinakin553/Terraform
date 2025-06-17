@@ -94,3 +94,112 @@ terraform apply tfplan
 ```
 Saves the plan for manual review, approval gates, or CI/CD pipelines.
 Prevents drift between the plan and the apply.
+
+# 🚀 Terraform AWS EC2 Module Example
+
+This project demonstrates how to use a **custom Terraform module** to provision **multiple EC2 instances** with support for:
+
+- `count`
+- `connection`
+- `provisioner` (`remote-exec`)
+- `lifecycle` rules
+- Dynamic `tags` and `SSH` access
+- Module reusability
+
+---
+
+## 📁 Directory Structure
+
+terraform-ec2/
+├── main.tf
+├── variables.tf
+├── outputs.tf
+├── modules/
+│ └── ec2/
+│ ├── main.tf
+│ ├── variables.tf
+│ └── outputs.tf
+
+
+---
+
+## Module: `modules/ec2/main.tf`
+
+```
+variable "instance_count" {
+  type    = number
+  default = 1
+}
+
+variable "instance_type" {
+  type    = string
+  default = "t2.micro"
+}
+
+variable "ami_id" {
+  type = string
+}
+
+variable "key_name" {
+  type = string
+}
+
+variable "tags" {
+  type = map(string)
+  default = {}
+}
+
+resource "aws_instance" "ec2" {
+  count         = var.instance_count
+  ami           = var.ami_id
+  instance_type = var.instance_type
+  key_name      = var.key_name
+
+  lifecycle {
+    create_before_destroy = true
+    prevent_destroy       = true
+  }
+
+  connection {
+    type        = "ssh"
+    user        = "ubuntu"
+    private_key = file("~/.ssh/id_rsa")
+    host        = self.public_ip
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "sudo apt update -y",
+      "sudo apt install -y nginx",
+      "echo Hello from Terraform >> /tmp/welcome.txt"
+    ]
+  }
+
+  tags = merge(var.tags, {
+    Name = "Terraform-EC2-${count.index}"
+  })
+}
+
+output "instance_ips" {
+  value = aws_instance.ec2[*].public_ip
+}
+
+## Remote: `main.tf`
+
+provider "aws" {
+  region = "us-east-1"
+}
+
+module "web_servers" {
+  source         = "./modules/ec2"
+  instance_count = 2
+  ami_id         = "ami-0c55b159cbfafe1f0"
+  instance_type  = "t2.micro"
+  key_name       = "my-key"
+
+  tags = {
+    Environment = "dev"
+    Project     = "TerraformExample"
+  }
+}
+
