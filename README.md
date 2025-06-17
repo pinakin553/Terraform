@@ -230,9 +230,9 @@ This cheat sheet summarizes the most commonly used **Terraform meta-arguments an
 ```
 ---
 ## 💡 Usage Examples
-```
-### `provisioner` & `connection`
 
+### `provisioner` & `connection`
+```
 resource "aws_instance" "example" {
   ami           = "ami-0c55b159cbfafe1f0"
   instance_type = "t2.micro"
@@ -251,8 +251,9 @@ resource "aws_instance" "example" {
     ]
   }
 }
+```
 ### `null_resources` & `trigger`
-
+```
 resource "null_resource" "example" {
   triggers = {
     always_run = timestamp()
@@ -262,8 +263,9 @@ resource "null_resource" "example" {
     command = "echo 'Triggered at ${self.triggers.always_run}'"
   }
 }
+```
 ### `lifecycle`
-
+```
 resource "aws_s3_bucket" "example" {
   bucket = "my-bucket"
 
@@ -278,8 +280,9 @@ resource "aws_instance" "count_example" {
   ami           = "ami-0c55b159cbfafe1f0"
   instance_type = "t2.micro"
 }
-
+```
 ### `count vs for_each`
+```
 resource "aws_instance" "for_each_example" {
   for_each      = toset(["dev", "qa", "prod"])
   ami           = "ami-0c55b159cbfafe1f0"
@@ -292,9 +295,9 @@ resource "aws_instance" "for_each_example" {
 resource "aws_s3_bucket" "data" {
   bucket = "data-bucket"
 }
-
+```
 ### `depends_on usage`
-
+```
 resource "aws_lambda_function" "processor" {
   filename         = "lambda.zip"
   function_name    = "data-processor"
