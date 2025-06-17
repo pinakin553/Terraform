@@ -227,10 +227,10 @@ This cheat sheet summarizes the most commonly used **Terraform meta-arguments an
 | `provider`           | Meta-arg     | Resource / Module     | Overrides default provider config (e.g., region/account).                   |
 | `timeouts`           | Block        | Some Resources        | Specifies custom timeouts for create, update, and delete operations.        |
 
----
 ```
+---
 ## 💡 Usage Examples
-
+```
 ### `provisioner` & `connection`
 
 resource "aws_instance" "example" {
@@ -304,4 +304,6 @@ resource "aws_lambda_function" "processor" {
 
   depends_on = [aws_s3_bucket.data]
 }
+
+```
 
