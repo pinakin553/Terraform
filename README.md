@@ -205,4 +205,103 @@ module "web_servers" {
     Project     = "TerraformExample"
   }
 }
+```
+
+# ✅ Terraform Meta-Arguments & Special Blocks – Cheat Sheet
+
+This cheat sheet summarizes the most commonly used **Terraform meta-arguments and special blocks** to enhance control, customization, and lifecycle management of your infrastructure resources.
+
+---
+
+## 🔧 Table of Blocks & Meta-Arguments
+```
+| **Block / Argument** | **Type**     | **Used In**          | **Purpose**                                                                 |
+|----------------------|--------------|-----------------------|------------------------------------------------------------------------------|
+| `provisioner`        | Block        | Resource              | Executes scripts or commands via `local-exec` or `remote-exec`.             |
+| `connection`         | Block        | Resource              | Defines SSH or WinRM connection details for remote provisioning.            |
+| `triggers`           | Map          | `null_resource`       | Forces recreation of resource when any specified input changes.             |
+| `lifecycle`          | Block        | Resource              | Controls behavior: `create_before_destroy`, `prevent_destroy`, `ignore_changes`. |
+| `depends_on`         | Meta-arg     | Resource / Module     | Explicitly declares dependencies to manage resource/module creation order.  |
+| `count`              | Meta-arg     | Resource / Module     | Creates multiple instances of a resource (numerically indexed).             |
+| `for_each`           | Meta-arg     | Resource / Module     | Creates multiple instances (map/set indexed by keys).                       |
+| `provider`           | Meta-arg     | Resource / Module     | Overrides default provider config (e.g., region/account).                   |
+| `timeouts`           | Block        | Some Resources        | Specifies custom timeouts for create, update, and delete operations.        |
+
+---
+```
+## 💡 Usage Examples
+
+### `provisioner` & `connection`
+
+resource "aws_instance" "example" {
+  ami           = "ami-0c55b159cbfafe1f0"
+  instance_type = "t2.micro"
+
+  connection {
+    type        = "ssh"
+    user        = "ubuntu"
+    private_key = file("~/.ssh/id_rsa")
+    host        = self.public_ip
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "sudo apt update -y",
+      "sudo apt install -y nginx"
+    ]
+  }
+}
+### `null_resources` & `trigger`
+
+resource "null_resource" "example" {
+  triggers = {
+    always_run = timestamp()
+  }
+
+  provisioner "local-exec" {
+    command = "echo 'Triggered at ${self.triggers.always_run}'"
+  }
+}
+### `lifecycle`
+
+resource "aws_s3_bucket" "example" {
+  bucket = "my-bucket"
+
+  lifecycle {
+    prevent_destroy = true
+    ignore_changes  = [tags]
+  }
+}
+
+resource "aws_instance" "count_example" {
+  count         = 2
+  ami           = "ami-0c55b159cbfafe1f0"
+  instance_type = "t2.micro"
+}
+
+### `count vs for_each`
+resource "aws_instance" "for_each_example" {
+  for_each      = toset(["dev", "qa", "prod"])
+  ami           = "ami-0c55b159cbfafe1f0"
+  instance_type = "t2.micro"
+  tags = {
+    Environment = each.key
+  }
+}
+
+resource "aws_s3_bucket" "data" {
+  bucket = "data-bucket"
+}
+
+### `depends_on usage`
+
+resource "aws_lambda_function" "processor" {
+  filename         = "lambda.zip"
+  function_name    = "data-processor"
+  role             = aws_iam_role.lambda_exec.arn
+  handler          = "index.handler"
+  runtime          = "nodejs14.x"
+
+  depends_on = [aws_s3_bucket.data]
+}
 
