@@ -311,4 +311,23 @@ resource "aws_lambda_function" "processor" {
 }
 
 ```
+---
+
+# 🔧 DevOps/SRE Engineering Principles – Practical Examples
+```
+This table summarizes how common engineering principles apply across Terraform, CI/CD, and SRE workflows:
+
+| Principle | Terraform Example                                      | CI/CD Example                              | SRE Example                                 |
+|-----------|--------------------------------------------------------|--------------------------------------------|---------------------------------------------|
+| **DRY**   | Use reusable modules, `for_each` for resource reuse    | Reuse common GitHub Actions or GitLab jobs | Reuse alerting templates across services     |
+| **KISS**  | Avoid overly nested or abstract modules                | Keep pipelines simple and clear            | Prefer managed services over custom tooling  |
+| **YAGNI** | Don’t pre-optimize for multi-cloud unless required     | Skip complex rollback logic in dev         | Avoid building dashboards no one uses        |
+```
+## ✅ Key Takeaways
+```
+- **DRY (Don't Repeat Yourself):** Promotes reuse and consistency across infra-as-code, pipelines, and monitoring.
+- **KISS (Keep It Simple, Stupid):** Encourages simplicity in design, reducing maintenance overhead.
+- **YAGNI (You Aren’t Gonna Need It):** Avoid overengineering features or infra you don’t yet need.
+
+```
 
