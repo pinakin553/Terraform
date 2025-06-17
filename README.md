@@ -110,6 +110,7 @@ This project demonstrates how to use a **custom Terraform module** to provision 
 
 ## 📁 Directory Structure
 
+```
 terraform-ec2/
 ├── main.tf
 ├── variables.tf
@@ -119,7 +120,7 @@ terraform-ec2/
 │ ├── main.tf
 │ ├── variables.tf
 │ └── outputs.tf
-
+```
 
 ---
 
@@ -184,6 +185,7 @@ output "instance_ips" {
   value = aws_instance.ec2[*].public_ip
 }
 
+```
 ## Remote: `main.tf`
 
 provider "aws" {
@@ -202,4 +204,4 @@ module "web_servers" {
     Project     = "TerraformExample"
   }
 }
-
+```
