@@ -185,8 +185,10 @@ output "instance_ips" {
   value = aws_instance.ec2[*].public_ip
 }
 ```
-## Remote: `main.tf`
+---
 
+## Remote: `main.tf`
+```
 provider "aws" {
   region = "us-east-1"
 }
